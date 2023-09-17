@@ -15,6 +15,6 @@ export type InfoCepCorrigida = {
   logradouro: string;
   complemento: string;
   bairro: string;
-  localidade: string;
+  cidade: string;
   uf: string;
 };

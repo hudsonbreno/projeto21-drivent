@@ -7,7 +7,6 @@ import { InfoCepCorrigida } from '@/protocols';
 
 // TODO - Receber o CEP por parâmetro nesta função.
 async function getAddressFromCEP(cep: number): Promise<InfoCepCorrigida> {
-  console.log(cep);
   // FIXME: está com CEP fixo!
   const result = await request.get(`${process.env.VIA_CEP_API}/${cep}/json/`);
 
@@ -19,7 +18,7 @@ async function getAddressFromCEP(cep: number): Promise<InfoCepCorrigida> {
     logradouro: result.data.logradouro,
     complemento: result.data.complemento,
     bairro: result.data.bairro,
-    localidade: result.data.localidade,
+    cidade: result.data.localidade,
     uf: result.data.uf,
   };
 

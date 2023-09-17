@@ -63,7 +63,7 @@ async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollm
   console.log(logradouro);
   if (logradouro !== address.street) throw invalidStreet;
 
-  const localidade = result.localidade;
+  const localidade = result.cidade;
   if (localidade !== address.city) throw invalidCEP;
 
   const newEnrollment = await enrollmentRepository.upsert(params.userId, enrollment, exclude(enrollment, 'userId'));

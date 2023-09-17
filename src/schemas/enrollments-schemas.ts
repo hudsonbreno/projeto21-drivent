@@ -6,7 +6,7 @@ const cpfValidationSchema = Joi.string().length(11).custom(joiCpfValidation).req
 
 const cepValidationSchema = Joi.string().length(9).custom(joiCepValidation).required();
 
-const mobilePhoneValidationSchema = Joi.string().min(14).max(15).custom(joiMobilePhoneValidation).required();
+const mobilePhoneValidationSchema = Joi.string().min(14).max(15).required(); //erro
 
 export const createOrUpdateEnrollmentSchema = Joi.object<CreateOrUpdateEnrollmentWithAddress>({
   name: Joi.string().min(3).required(),

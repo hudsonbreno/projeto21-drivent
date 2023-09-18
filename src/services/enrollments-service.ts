@@ -6,7 +6,7 @@ import { exclude } from '@/utils/prisma-utils';
 import { InfoCepCorrigida } from '@/protocols';
 
 // TODO - Receber o CEP por parâmetro nesta função.
-async function getAddressFromCEP(cep: number): Promise<InfoCepCorrigida> {
+async function getAddressFromCEP(cep: string): Promise<InfoCepCorrigida> {
   // FIXME: está com CEP fixo!
   const result = await request.get(`${process.env.VIA_CEP_API}/${cep}/json/`);
 
@@ -28,7 +28,7 @@ async function getAddressFromCEP(cep: number): Promise<InfoCepCorrigida> {
 async function getOneWithAddressByUserId(userId: number): Promise<GetOneWithAddressByUserIdResult> {
   const enrollmentWithAddress = await enrollmentRepository.findWithAddressByUserId(userId);
 
-  if (!enrollmentWithAddress) throw notFoundError();
+  if (!enrollmentWithAddress) throw invalidStreet();
 
   const [firstAddress] = enrollmentWithAddress.Address;
   const address = getFirstAddress(firstAddress);
@@ -57,14 +57,7 @@ async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollm
   // TODO - Verificar se o CEP é válido antes de associar ao enrollment.
   const cepsemHifem = address.cep.replace(/\D/g, '');
 
-  const result = await getAddressFromCEP(Number(cepsemHifem));
-
-  const logradouro = result.logradouro;
-  console.log(logradouro);
-  if (logradouro !== address.street) throw invalidStreet;
-
-  const localidade = result.cidade;
-  if (localidade !== address.city) throw invalidCEP;
+  const result = await getAddressFromCEP(cepsemHifem);
 
   const newEnrollment = await enrollmentRepository.upsert(params.userId, enrollment, exclude(enrollment, 'userId'));
 
